@@ -7,8 +7,8 @@
     <title>Amilia Innovation Day</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <link href="favicon.png" rel="apple-touch-icon" />
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="/favicon.png" rel="apple-touch-icon" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <meta name="mobileoptimized" content="0" />
@@ -16,14 +16,14 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="js/chart.min.js" type="text/javascript"></script>
-    <script src="js/app.js" type="text/javascript"></script>
+    <script src="/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/chart.min.js" type="text/javascript"></script>
+    <script src="/js/app.js" type="text/javascript"></script>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="css/app.css" rel="stylesheet" type="text/css">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/app.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Amaranth|Dancing+Script" rel="stylesheet">
     <script>
       window.projects = <?=json_encode($projects)?>;
@@ -34,7 +34,7 @@
 
   <body>
     <header>
-      <h4><img src="favicon.png" />&nbsp;&nbsp;Amilia Innovation Day</h4>
+      <h4><img src="/favicon.png" />&nbsp;&nbsp;Amilia Innovation Day</h4>
     </header>
 
     <?php if ($page == 'home'): ?>
@@ -59,7 +59,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12 col-sm-4 col-md-4">
-            <form action="submit.php">
+            <form action="/submit.php">
               <input type="hidden" name="id" value="<?=$person['id']?>" />
 
               <?php $er = is_array($error) && array_key_exists('name', $error) ? $error['name'] : NULL; ?>
@@ -113,7 +113,7 @@
               <br/>
               <?php if ($saved === TRUE): ?>
                 <p class="text-success text-center lead"><i class="fa fa-fw fa-check"></i> Your vote was saved!</p>
-                <a class="btn btn-success btn-lg btn-block" href="results.php">Go see results</a>
+                <a class="btn btn-success btn-lg btn-block" href="/results.php">Go see results</a>
                 <button class="btn btn-default btn-block" type="submit">Submit again</button>
               <?php elseif (is_array($error)): ?>
                 <p class="text-danger text-center lead"><i class="fa fa-fw fa-warning"></i> Fix 'em errors and try again.</p>
@@ -149,9 +149,9 @@
     <br/><br/><br/><br/>
 
     <footer>
-      <a href="/innovation" class="home footer-btn <?=$page == 'home' ? 'selected': ''?>"><i class="fa fa-fw fa-home"></i></a>
-      <a href="/innovation/vote.php" class="vote footer-btn <?=$page == 'vote' ? 'selected': ''?>"><i class="fa fa-fw fa-check-square-o"></i></a>
-      <a href="/innovation/results.php" class="results footer-btn <?=$page == 'results' ? 'selected': ''?>"><i class="fa fa-fw fa-bar-chart"></i></a>
+      <a href="/" class="home footer-btn <?=$page == 'home' ? 'selected': ''?>"><i class="fa fa-fw fa-home"></i></a>
+      <a href="/vote.php" class="vote footer-btn <?=$page == 'vote' ? 'selected': ''?>"><i class="fa fa-fw fa-check-square-o"></i></a>
+      <a href="/results.php" class="results footer-btn <?=$page == 'results' ? 'selected': ''?>"><i class="fa fa-fw fa-bar-chart"></i></a>
     </footer>
 
   </body>
