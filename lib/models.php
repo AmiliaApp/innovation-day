@@ -98,9 +98,12 @@
       $stmt->execute();
       $stmt->close();
     }
+    
+    $mysqli->close();
 
     $expire = time()+60*60*24*30;
     setcookie(COOKIE_NAME, $session, $expire, '/');
+
     return $session;
   }
 
