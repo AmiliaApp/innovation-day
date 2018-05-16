@@ -1,5 +1,5 @@
 <?php
-  // Globals $page, $projects, $person, $error and #saved are assumed to exist
+  // Globals $page, $projects, $person, $error and $saved are assumed to exist
 ?>
 <!doctype html>
 <html lang="en">
@@ -41,7 +41,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12 text-center">
-            <div class="splash"><i class="fa fa-fw fa-trophy"></i></div>
+            <div class="splash"><img src="/img/trophy-circle.png" alt="trophy" /></div>
           </div>
         </div>
         <div class="row">
@@ -65,7 +65,7 @@
               <?php $er = is_array($error) && array_key_exists('name', $error) ? $error['name'] : NULL; ?>
               <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>">
                 <label class="control-label">Your name</label>
-                <input class="form-control" type="text" name="name" value="<?=$person['name']?>" />
+                <input class="form-control" type="text" name="name" value="<?=$person['name']?>" <?=$saved ? 'disabled="disabled"' : ''?> />
                 <?php if ($er != NULL): ?>
                   <div class="help-block"><?=$er?></div>
                 <?php endif; ?>
@@ -74,7 +74,7 @@
               <?php $er = is_array($error) && array_key_exists('vote1_project_id', $error) ? $error['vote1_project_id'] : NULL; ?>
               <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>">
                 <label class="control-label">Best overall</label>
-                <select class="form-control" name="vote1_project_id">
+                <select class="form-control" name="vote1_project_id" <?=$saved ? 'disabled="disabled"' : ''?>>
                   <?php foreach ($projects as $project): ?>
                     <option value="<?=$project['id']?>" <?=$project['id'] == $person['vote1_project_id'] ? 'selected="selected"' : ''?>><?=$project['name']?></option>
                   <?php endforeach; ?>>
@@ -87,7 +87,7 @@
               <?php $er = is_array($error) && array_key_exists('vote2_project_id', $error) ? $error['vote2_project_id'] : NULL; ?>
               <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>">
                 <label class="control-label">Best presentation</label>
-                <select class="form-control" name="vote2_project_id">
+                <select class="form-control" name="vote2_project_id" <?=$saved ? 'disabled="disabled"' : ''?>>
                   <?php foreach ($projects as $project): ?>
                     <option value="<?=$project['id']?>" <?=$project['id'] == $person['vote2_project_id'] ? 'selected="selected"' : ''?>><?=$project['name']?></option>
                   <?php endforeach; ?>>
@@ -100,7 +100,7 @@
               <?php $er = is_array($error) && array_key_exists('vote3_project_id', $error) ? $error['vote3_project_id'] : NULL; ?>
               <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>">
                 <label class="control-label">Best MVP</label>
-                <select class="form-control" name="vote3_project_id">
+                <select class="form-control" name="vote3_project_id" <?=$saved ? 'disabled="disabled"' : ''?>>
                   <?php foreach ($projects as $project): ?>
                     <option value="<?=$project['id']?>" <?=$project['id'] == $person['vote3_project_id'] ? 'selected="selected"' : ''?>><?=$project['name']?></option>
                   <?php endforeach; ?>>
@@ -114,7 +114,8 @@
               <?php if ($saved === TRUE): ?>
                 <p class="text-success text-center lead"><i class="fa fa-fw fa-check"></i> Your vote was saved!</p>
                 <a class="btn btn-success btn-lg btn-block" href="/results.php">Go see results</a>
-                <button class="btn btn-default btn-block" type="submit">Submit again</button>
+                <a class="btn btn-default btn-block submit-again" href="#">Vote again</a>
+                <button class="btn btn-primary btn-lg btn-block" type="submit" style="display: none;">Submit</button>
               <?php elseif (is_array($error)): ?>
                 <p class="text-danger text-center lead"><i class="fa fa-fw fa-warning"></i> Fix 'em errors and try again.</p>
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Submit again</button>

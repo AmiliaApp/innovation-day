@@ -5,10 +5,12 @@ $(document).ready(function() {
 
   if (page == 'vote') {
     var $form = $('form');
-    $form.find('input,select').one('change', function(e) {
-      $form.find('a.btn-success').hide();
-      $form.find('p.text-success').hide();
-      $form.find('button[type=submit]').removeClass('btn-default').addClass('btn-lg btn-primary');
+    $form.find('a.submit-again').on('click', function(e) {
+      e.preventDefault();
+      $form.find('a.btn-success,p.text-success,a.submit-again').hide();
+      $form.find('button[type=submit]').show();
+      $form.find('input,select').removeAttr('disabled');
+      $form.find('select:first').focus();
     });
   }
 
