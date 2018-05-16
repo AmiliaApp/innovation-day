@@ -31,7 +31,7 @@
 
   // Insert or update. Will persist session in a cookie. Returns the update/inserted person.
   if (empty($error)) {
-    $person = setPerson($person);
+    $person['session'] = setPerson($person);
     $saved = TRUE;
   }
 

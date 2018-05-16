@@ -1,6 +1,17 @@
 $(document).ready(function() {
   if (window.navigator.standalone) $('body').addClass('standalone');
 
+  // Globals: page, projects & person
+
+  if (page == 'vote') {
+    var $form = $('form');
+    $form.find('input,select').one('change', function(e) {
+      $form.find('a.btn-success').hide();
+      $form.find('p.text-success').hide();
+      $form.find('button[type=submit]').removeClass('btn-default').addClass('btn-lg btn-primary');
+    });
+  }
+
   if (page == 'results') {
 
     $('canvas.votes').each(function() {

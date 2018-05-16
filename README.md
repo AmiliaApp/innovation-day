@@ -14,13 +14,14 @@ ALTER TABLE `project` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO
 
 CREATE TABLE `person_votes` (
   `id` int(10) UNSIGNED NOT NULL,
+  `session` varchar(32) NOT NULL,
   `date` date NOT NULL,
   `name` varchar(255) NOT NULL,
   `vote1_project_id` int(10) UNSIGNED DEFAULT NULL,
   `vote2_project_id` int(10) UNSIGNED DEFAULT NULL,
   `vote3_project_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-ALTER TABLE `person_votes` ADD PRIMARY KEY (`id`);
+ALTER TABLE `person_votes` ADD PRIMARY KEY (`id`), ADD KEY `session` (`session`);
 ALTER TABLE `person_votes` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ```
 

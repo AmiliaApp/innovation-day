@@ -6,113 +6,102 @@
   define('VOTE2_NAME', 'Best presentation');
   define('VOTE3_NAME', 'Best MVP');
 
-  function get($query) {
-    $records = getMany($query);
-    return count($records) > 0 ? $records[0] : NULL;
-  }
-
-  function getMany($query) {
+  function getProjects() {
     $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
 
-    $records = array();
-    if ($result = $mysqli->query($query)) {
-      while ($row = $result->fetch_assoc()) $records[] = $row;
+    $projects = array();
+    $map = array();
+    if ($result = $mysqli->query("SELECT * FROM project")) {
+      while ($project = $result->fetch_assoc()) {
+        $project_id = (int)$project['id'];
+        $project['id'] = $project_id;
+        $project['vote1'] = 0;
+        $project['vote2'] = 0;
+        $project['vote3'] = 0;
+        $map[$project_id] = count($projects);
+        $projects[] = $project;
+      }
+      $result->free();
+    }
+
+    if ($result = $mysqli->query("SELECT * FROM person_votes")) {
+      while ($vote = $result->fetch_assoc()) {
+        $projects[$map[(int)$vote['vote1_project_id']]]['vote1'] += 1;
+        $projects[$map[(int)$vote['vote2_project_id']]]['vote2'] += 1;
+        $projects[$map[(int)$vote['vote3_project_id']]]['vote3'] += 1;
+      }
       $result->free();
     }
 
     $mysqli->close();
-
-    return $records;
-  }
-
-  function update($query) {
-    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
-    $result = $mysqli->query($query);
-    $mysqli->close();
-    return $result;
-  }
-
-  function insert($query) {
-    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
-    if ($result = $mysqli->query($query)) {
-      $result = $mysqli->insert_id;
-    }
-
-    $mysqli->close();
-    return $result;
-  }
-
-  function getProjects() {
-    $projects = getMany("SELECT * FROM project");
-    $map = array();
-    foreach ($projects as $row => $project) {
-      $project_id = (int)$project['id'];
-      $projects[$row]['id'] = $project_id;
-      $projects[$row]['vote1'] = 0;
-      $projects[$row]['vote2'] = 0;
-      $projects[$row]['vote3'] = 0;
-      $map[$project_id] = $row;
-    }
-    $votes = getMany("SELECT * FROM person_votes");
-    foreach ($votes as $vote) {
-      $projects[$map[(int)$vote['vote1_project_id']]]['vote1'] += 1;
-      $projects[$map[(int)$vote['vote2_project_id']]]['vote2'] += 1;
-      $projects[$map[(int)$vote['vote3_project_id']]]['vote3'] += 1;
-    }
     return $projects;
   }
 
   function getPerson() {
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
+
     $person = NULL;
-    $id = NULL;
-    if (array_key_exists(COOKIE_NAME, $_COOKIE)) $id = $_COOKIE[COOKIE_NAME];
-    if (is_numeric($id)) $person = get("SELECT * FROM person_votes WHERE id = $id");
-    if ($person == NULL) return array(
+    if (array_key_exists(COOKIE_NAME, $_COOKIE)) {
+      $stmt = $mysqli->prepare("SELECT * FROM person_votes WHERE session=?");
+      $stmt->bind_param("s", $_COOKIE[COOKIE_NAME]);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $person = $result->fetch_assoc();
+      $result->free();
+      $stmt->close();
+    }
+
+    $mysqli->close();
+
+    return is_array($person) ? $person : array(
       'id' => NULL,
+      'session' => NULL,
       'date' => NULL,
       'name' => '',
       'vote1_project_id' => NULL,
       'vote2_project_id' => NULL,
       'vote3_project_id' => NULL
     );
-    return $person;
   }
 
   function setPerson($person) {
-    $id = $person['id'];
+    $session = NULL;
+    $existing = getPerson();
 
-    if (is_numeric($id)) {
-      // Update existing record
-      $existing = get("SELECT * FROM person_votes WHERE id = $id");
-      if ($existing != NULL) {
-        $sql = "UPDATE person_votes SET ";
-        $sql .= "name='".$person['name']."', ";
-        $sql .= "date=NOW(), ";
-        $sql .= "vote1_project_id=".$person['vote1_project_id'].", ";
-        $sql .= "vote2_project_id=".$person['vote2_project_id'].", ";
-        $sql .= "vote3_project_id=".$person['vote3_project_id']." ";
-        $sql .= "WHERE id=$id";
-        update($sql);
-      }
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
+
+    if ($existing['session'] != NULL) {
+      // Update
+      $stmt = $mysqli->prepare("UPDATE person_votes SET name=?, date=?, vote1_project_id=?, vote2_project_id=?, vote3_project_id=? WHERE session=?");
+      $stmt->bind_param("ssiiis", $name, $date, $vote1_project_id, $vote2_project_id, $vote3_project_id, $session);
+      $session = $existing['session'];
+      $name = $person['name'];
+      $date = date('Y-m-d', time());
+      $vote1_project_id = $person['vote1_project_id'];
+      $vote2_project_id = $person['vote2_project_id'];
+      $vote3_project_id = $person['vote3_project_id'];
+      $stmt->execute();
+      $stmt->close();
     } else {
-      // Insert new record
-      $sql = "INSERT INTO person_votes (name, date, vote1_project_id, vote2_project_id, vote3_project_id) VALUES (";
-      $sql .= "'".$person['name']."', ";
-      $sql .= "NOW(), ";
-      $sql .= $person['vote1_project_id'].", ";
-      $sql .= $person['vote2_project_id'].", ";
-      $sql .= $person['vote3_project_id'].")";
-      $id = insert($sql);
-      $person['id'] = $id;
+      // Insert
+      $stmt = $mysqli->prepare("INSERT INTO person_votes (session, name, date, vote1_project_id, vote2_project_id, vote3_project_id) VALUES (?, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("sssiii", $session, $name, $date, $vote1_project_id, $vote2_project_id, $vote3_project_id);
+      $session = md5(time().$person['name'].'salty-chips');
+      $name = $person['name'];
+      $date = date('Y-m-d', time());
+      $vote1_project_id = $person['vote1_project_id'];
+      $vote2_project_id = $person['vote2_project_id'];
+      $vote3_project_id = $person['vote3_project_id'];
+      $stmt->execute();
+      $stmt->close();
     }
 
     $expire = time()+60*60*24*30;
-    setcookie(COOKIE_NAME, $id, $expire, '/');
-
-    return $person;
+    setcookie(COOKIE_NAME, $session, $expire, '/');
+    return $session;
   }
 
 ?>
