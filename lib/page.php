@@ -61,6 +61,9 @@
           <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
             <form action="/submit.php">
               <input type="hidden" name="id" value="<?=$person['id']?>" />
+              <?php if ($saved): ?>
+                <p class="text-success text-center lead"><i class="fa fa-fw fa-check"></i> Your vote was saved!</p>
+              <?php endif; ?>
 
               <?php $er = is_array($error) && array_key_exists('name', $error) ? $error['name'] : NULL; ?>
               <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>">
@@ -112,7 +115,6 @@
 
               <br/>
               <?php if ($saved === TRUE): ?>
-                <p class="text-success text-center lead"><i class="fa fa-fw fa-check"></i> Your vote was saved!</p>
                 <a class="btn btn-success btn-lg btn-block" href="/results.php">Go see results</a>
                 <a class="btn btn-default btn-block submit-again" href="#">Vote again</a>
                 <button class="btn btn-primary btn-lg btn-block" type="submit" style="display: none;">Submit</button>
