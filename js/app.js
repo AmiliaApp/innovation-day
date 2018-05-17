@@ -7,9 +7,9 @@ $(document).ready(function() {
     var $form = $('form');
     $form.find('a.submit-again').on('click', function(e) {
       e.preventDefault();
-      $form.find('a.btn-success,p.text-success,a.submit-again').hide();
+      $form.find('a.btn-success,p.text-success,a.submit-again,p.filled-form').hide();
+      $form.find('.form-group').show();
       $form.find('button[type=submit]').show();
-      $form.find('input,select').removeAttr('disabled');
       $form.find('select:first').focus();
     });
   }
