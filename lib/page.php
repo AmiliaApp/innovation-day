@@ -19,11 +19,11 @@
     <script src="/js/jquery.min.js" type="text/javascript"></script>
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/js/chart.min.js" type="text/javascript"></script>
-    <script src="/js/app.js" type="text/javascript"></script>
+    <script src="/js/app.js?<?=rand()?>" type="text/javascript"></script>
 
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="/css/app.css" rel="stylesheet" type="text/css">
+    <link href="/css/app.css?<?=rand()?>" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Amaranth|Dancing+Script" rel="stylesheet">
     <script>
       window.projects = <?=json_encode($projects)?>;
