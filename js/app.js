@@ -23,7 +23,7 @@ $(document).ready(function() {
 
       var data = JSON.parse(JSON.stringify(projects));
       data.sort(function(a, b) {
-        return (a[column] < b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0);
+        return a[column] < b[column] ? 1 : (a[column] > b[column] ? -1 : 0);
       });
 
       var colors = [];
