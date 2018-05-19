@@ -35,7 +35,7 @@ $(document).ready(function() {
           labels: data.map(function(p) {return p.name;}),
           datasets: [
             {
-              label: "Population (millions)",
+              label: "Votes",
               backgroundColor: colors,
               data: data.map(function(p) {return p[column];})
             }
