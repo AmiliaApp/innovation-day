@@ -16,13 +16,18 @@ $(document).ready(function() {
 
   if (page == 'results') {
 
+    var default_colors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC'];
+
     $('canvas.votes').each(function() {
       var column = $(this).data('vote');
 
       var data = JSON.parse(JSON.stringify(projects));
-      data.sort(function(a,b) {
+      data.sort(function(a, b) {
         return (a[column] < b[column]) ? 1 : ((b[column] > a[column]) ? -1 : 0);
-      }); 
+      });
+
+      var colors = [];
+      for (var i = 0; i < data.length; i++) colors.push(default_colors[i%default_colors.length]);
 
       new Chart(this, {
         type: 'horizontalBar',
@@ -31,7 +36,7 @@ $(document).ready(function() {
           datasets: [
             {
               label: "Population (millions)",
-              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+              backgroundColor: colors,
               data: data.map(function(p) {return p[column];})
             }
           ]
