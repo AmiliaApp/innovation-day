@@ -3,11 +3,11 @@
   require 'lib/models.php';
 
   global $page, $event, $projects, $person, $error, $saved;
-  $page = 'home';
+  $page = 'admin';
   $event = getCurrentEvent();
   $event_id = is_array($event) ? $event['id'] : NULL;
   $projects = getProjects($event_id);
-  $person = getPerson($event_id);
+  $person = NULL;
   $error = NULL;
   $saved = FALSE;
 

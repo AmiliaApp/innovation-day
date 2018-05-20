@@ -2,9 +2,11 @@
   ob_start();
   require 'lib/models.php';
 
-  global $page, $projects, $person, $error, $saved;
+  global $page, $event, $projects, $person, $error, $saved;
   $page = 'vote';
-  $projects = getProjects();
+  $event = getCurrentEvent();
+  $event_id = is_array($event) ? $event['id'] : NULL;
+  $projects = getProjects($event_id);
   $saved = FALSE;
 
   // Fetch submitted values and update in Database
