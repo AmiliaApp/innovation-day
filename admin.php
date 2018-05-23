@@ -9,7 +9,7 @@
   $projects = getProjects($event_id);
   $person = NULL;
   $error = NULL;
-  $saved = FALSE;
+  $saved = is_numeric($event_id);
 
   require 'lib/page.php';
   ob_flush();

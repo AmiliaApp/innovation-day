@@ -4,7 +4,6 @@
 
   global $page, $event, $projects, $person, $error, $saved;
   $page = 'admin';
-  $projects = array();
   $person = NULL;
   $saved = FALSE;
 
@@ -31,6 +30,9 @@
     setCurrentEvent($event);
     $saved = TRUE;
   }
+
+  $event_id = is_array($event) ? $event['id'] : NULL;
+  $projects = getProjects($event_id);
 
   require 'lib/page.php';
   ob_flush();

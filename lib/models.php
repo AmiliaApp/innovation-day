@@ -5,6 +5,13 @@
   define('VOTE2_NAME', 'Best presentation');
   define('VOTE3_NAME', 'Best MVP');
 
+  /*
+    Events - a list of innovation day events.
+    table: event
+    Only one current model can exist. This implies column 'active' is set to 1 on only one event.
+    Methods here act on the current active model only.
+  */
+
   function getCurrentEvent() {
     $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
@@ -56,6 +63,10 @@
     return $event;
   }
 
+  /*
+    Projects - a list of projects per innovation day event
+    table: project
+  */
   function getProjects($event_id) {
     if (!is_numeric($event_id)) return array();
 
@@ -90,6 +101,10 @@
     return $projects;
   }
 
+  /*
+    Votes - a list of person votes per innovation day event
+    table: person_votes
+  */
   function getPerson($event_id) {
     $empty = array(
       'id' => NULL,
