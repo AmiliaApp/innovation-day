@@ -90,25 +90,23 @@ Routes load the PHP file in question. The main default route is `index.php`. Let
 
 First, we initialize the output buffer with `ob_start`. As you `echo` HTML strings, it gets accunulated. At the end of the PHP script, we flush the buffer with `ob_flush` and that gets sent to the browser.
 
-The project uses the MVC pattern. Routes like `index.php` and `vote.php` are effectively controllers. File `models.php` is the model layer contains data access functions. It is the only file which talks to the database. It also creates a global `$_APP` array which contains the state of the applicaiton. The job of the controller is to fill the state and then call the view layout `page.php`.
+The project uses the MVC pattern. Routes like `index.php` and `vote.php` are effectively controllers. File `models.php` is the model layer which contains data access functions. It is the only file which talks to the database. It also creates a global `$_APP` array which contains the state of the application. The job of the controller is to fill the state and then call the view layout `page.php`.
 
 The view layout `page.php` is the HTML document we will send. It loads necessary scripts, CSS and sets up the skeleton HTML. It will then load the view specified by `$_APP['page']`. For instance page `home` will load the view `lib/home_view.php`.
 
 That's all there is to it.
 
-# Entities and pages
-
+# Entities
 The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 1. Event: The root entity representing the event in question. An event has a name and a date. There can only be one `active` event at a time. It is the one being displayed.
 2. Project: An event has a list of projects. A project has a name and a foreign key to the event it belongs to.
-3. Vote: A person can vote only once per project. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted vote in 3 hard-coded categories.
+3. Vote: A person can vote only once per project. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted vote in 3 hard-coded categories. A person can change their vote which simply updates the specific row.
 
 # Deploying to prod
-
 Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. Database migrations, if any, should be run prior to updating the code.
 
 # TO DO
-1. Implement project delete. In file `admin_projects_view.php` the delete button is hidden because the controller is not yet implemented.
+1. Implement project deletion. In file `admin_projects_view.php` the delete button is hidden because the controller is not yet implemented.
 2. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
 3. Create a new event. Currently, only the active existing event can be modified. In the admin page, we need to allow creating a new event and making it active.
 4. Allow viewing non active events and switching the active event.
