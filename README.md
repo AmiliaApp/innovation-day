@@ -1,4 +1,5 @@
 # Innovation Day Voting App
+![Innovation Day Voting App](img/preview.png)
 https://amilia.app
 
 # Introduction
