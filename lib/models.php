@@ -5,6 +5,17 @@
   define('VOTE2_NAME', 'Best presentation');
   define('VOTE3_NAME', 'Best MVP');
 
+  global $_APP;
+  $_APP = array(
+    'page' => 'home',
+    'event' => NULL,
+    'projects' => array(),
+    'project' => NULL,
+    'person' => NULL,
+    'error' => NULL,
+    'saved' => FALSE
+  );
+
   /*
     Events - a list of innovation day events.
     table: event
@@ -75,7 +86,7 @@
 
     $projects = array();
     $map = array();
-    if ($result = $mysqli->query("SELECT * FROM project WHERE event_id=$event_id")) {
+    if ($result = $mysqli->query("SELECT * FROM project WHERE event_id=$event_id ORDER BY id DESC")) {
       while ($project = $result->fetch_assoc()) {
         $project_id = (int)$project['id'];
         $project['id'] = $project_id;
@@ -99,6 +110,61 @@
 
     $mysqli->close();
     return $projects;
+  }
+
+  function getProject($project_id) {
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
+
+    $stmt = $mysqli->prepare("SELECT * FROM project WHERE id=?");
+    $stmt->bind_param("i", $project_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $project = $result->fetch_assoc();
+    $result->free();
+    $stmt->close();
+
+    $mysqli->close();
+
+    return is_array($project) ? $project : NULL;
+  }
+
+  function setProject($project) {
+    $event = getCurrentEvent();
+    if (!is_array($event)) die("No current event.");
+
+    if (!empty($project['id'])) {
+      $existing = getProject($project['id']);
+      if ($project['id'] != $existing['id']) die("Project id ".$project['id']."does not exist.");
+    }
+
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
+
+    if (!empty($project['id'])) {
+      // Update
+      $stmt = $mysqli->prepare("UPDATE project SET name=? WHERE id=?");
+      $stmt->bind_param("si", $name, $project_id);
+      $name = $project['name'];
+      $project_id = $project['id'];
+      $stmt->execute();
+      echo $stmt->error;
+      $stmt->close();
+    } else {
+      // Insert
+      $stmt = $mysqli->prepare("INSERT INTO project (name, event_id, date) VALUES (?, ?, ?)");
+      $stmt->bind_param("sis", $name, $event_id, $date);
+      $name = $project['name'];
+      $date = $event['date'];
+      $event_id = $event['id'];
+      $stmt->execute();
+      $stmt->close();
+      $project['id'] = $mysqli->insert_id;
+    }
+
+    $mysqli->close();
+
+    return $project;
   }
 
   /*
@@ -143,7 +209,7 @@
     if (!is_array($event)) die("No active event");
 
     $session = NULL;
-    $existing = getPerson($event_id);
+    $existing = getPerson($event['id']);
 
     $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);

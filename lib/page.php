@@ -1,6 +1,3 @@
-<?php
-  // Globals $page, $event, $projects, $person, $error and $saved are assumed to exist
-?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -26,12 +23,7 @@
     <link href="/css/app.css?<?=rand()?>" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Amaranth|Dancing+Script" rel="stylesheet">
     <script>
-      window.app = {
-        event: <?=json_encode($event)?>,
-        projects: <?=json_encode($projects)?>,
-        person: <?=json_encode($person)?>,
-        page: '<?=$page?>'
-      };
+      window.app = <?=json_encode($_APP)?>
     </script>
   </head>
 
@@ -43,14 +35,14 @@
       </h4>
     </header>
 
-    <?php require $page.'_view.php'; ?>
+    <?php require $_APP['page'].'_view.php'; ?>
 
     <br/><br/><br/><br/>
 
     <footer>
-      <a href="/" class="home footer-btn <?=$page == 'home' ? 'selected': ''?>"><i class="fa fa-fw fa-home"></i></a>
-      <a href="/vote.php" class="vote footer-btn <?=$page == 'vote' ? 'selected': ''?>"><i class="fa fa-fw fa-check-square-o"></i></a>
-      <a href="/results.php" class="results footer-btn <?=$page == 'results' ? 'selected': ''?>"><i class="fa fa-fw fa-bar-chart"></i></a>
+      <a href="/" class="home footer-btn <?=$_APP['page'] == 'home' ? 'selected': ''?>"><i class="fa fa-fw fa-home"></i></a>
+      <a href="/vote.php" class="vote footer-btn <?=$_APP['page'] == 'vote' ? 'selected': ''?>"><i class="fa fa-fw fa-check-square-o"></i></a>
+      <a href="/results.php" class="results footer-btn <?=$_APP['page'] == 'results' ? 'selected': ''?>"><i class="fa fa-fw fa-bar-chart"></i></a>
     </footer>
 
   </body>

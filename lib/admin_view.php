@@ -1,18 +1,18 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-      <?php if (is_array($event)): ?>
+      <?php if (is_array($_APP['event'])): ?>
         <h1>Active Event</h1>
         <form action="/admin_submit.php">
-          <input type="hidden" name="id" value="<?=$event['id']?>" />
-          <?php if ($saved): ?>
+          <input type="hidden" name="id" value="<?=$_APP['event']['id']?>" />
+          <?php if ($_APP['saved']): ?>
             <p class="text-success text-center lead"><i class="fa fa-fw fa-check"></i> Active event saved</p>
             <p class="lead filled-form">
-              Name: <strong><?=$event['name']?></strong><br/>
-              Date: <strong><?=$event['date']?></strong><br/>
-              <?php if (count($projects) > 0): ?>
+              Name: <strong><?=$_APP['event']['name']?></strong><br/>
+              Date: <strong><?=$_APP['event']['date']?></strong><br/>
+              <?php if (count($_APP['projects']) > 0): ?>
                 Projects:<br/>
-                <?php foreach ($projects as $project): ?>
+                <?php foreach ($_APP['projects'] as $project): ?>
                   <?php $votes = $project['vote1'] + $project['vote2'] + $project['vote3']; ?>
                   <i class="fa fa-fw fa-circle-o"></i> <?=$project['name']?>
                   &nbsp;
@@ -25,31 +25,31 @@
             </p>
           <?php endif; ?>
 
-          <?php $er = is_array($error) && array_key_exists('name', $error) ? $error['name'] : NULL; ?>
-          <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>" <?=$saved ? 'style="display:none;"' : ''?>>
+          <?php $er = is_array($_APP['error']) && array_key_exists('name', $_APP['error']) ? $_APP['error']['name'] : NULL; ?>
+          <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>" <?=$_APP['saved'] ? 'style="display:none;"' : ''?>>
             <label class="control-label">Event name</label>
-            <input class="form-control" type="text" name="name" value="<?=$event['name']?>" />
+            <input class="form-control" type="text" name="name" value="<?=$_APP['event']['name']?>" />
             <?php if ($er != NULL): ?>
               <div class="help-block"><?=$er?></div>
             <?php endif; ?>
           </div>
 
-          <?php $er = is_array($error) && array_key_exists('date', $error) ? $error['date'] : NULL; ?>
-          <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>" <?=$saved ? 'style="display:none;"' : ''?>>
+          <?php $er = is_array($_APP['error']) && array_key_exists('date', $_APP['error']) ? $_APP['error']['date'] : NULL; ?>
+          <div class="form-group form-group-lg <?=$er != NULL ? 'has-error' : ''?>" <?=$_APP['saved'] ? 'style="display:none;"' : ''?>>
             <label class="control-label">Event date</label>
-            <input class="form-control" type="text" name="date" value="<?=$event['date']?>" />
+            <input class="form-control" type="text" name="date" value="<?=$_APP['event']['date']?>" />
             <?php if ($er != NULL): ?>
               <div class="help-block"><?=$er?></div>
             <?php endif; ?>
           </div>
 
           <br/>
-          <?php if ($saved === TRUE): ?>
+          <?php if ($_APP['saved'] === TRUE): ?>
             <a href="#" class="btn btn-primary btn-lg modify-event">Modify event</a>
-            <a href="#" class="btn btn-primary btn-lg manage-projects">Manage projects</a>
+            <a href="/admin_projects.php" class="btn btn-default btn-lg manage-projects">Manage projects</a>
             <a href="/admin.php" class="btn btn-default btn-lg cancel" style="display: none;">Cancel</a>
             <button class="btn btn-primary btn-lg" type="submit" style="display: none;">Submit</button>
-          <?php elseif (is_array($error) && count($error) > 0): ?>
+          <?php elseif (is_array($_APP['error']) && count($_APP['error']) > 0): ?>
             <p class="text-danger text-center lead"><i class="fa fa-fw fa-warning"></i> Fix 'em errors and try again.</p>
             <a href="/admin.php" class="btn btn-default btn-lg cancel">Cancel</a>
             <button class="btn btn-primary btn-lg" type="submit">Submit again</button>

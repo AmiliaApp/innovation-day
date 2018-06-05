@@ -2,14 +2,12 @@
   ob_start();
   require 'lib/models.php';
 
-  global $page, $event, $projects, $person, $error, $saved;
-  $page = 'vote';
-  $event = getCurrentEvent();
-  $event_id = is_array($event) ? $event['id'] : NULL;
-  $projects = getProjects($event_id);
-  $person = getPerson($event_id);
-  $error = NULL;
-  $saved = is_numeric($person['id']);
+  $_APP['page'] = 'vote';
+  $_APP['event'] = getCurrentEvent();
+  $event_id = is_array($_APP['event']) ? $_APP['event']['id'] : NULL;
+  $_APP['projects'] = getProjects($event_id);
+  $_APP['person'] = getPerson($event_id);
+  $_APP['saved'] = is_numeric($_APP['person']['id']);
 
   require 'lib/page.php';
   ob_flush();
