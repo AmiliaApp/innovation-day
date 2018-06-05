@@ -1,6 +1,9 @@
 # Innovation Day Voting App
-![Innovation Day Voting App](img/preview.png)
+
 https://amilia.app
+
+![Innovation Day Voting App](img/preview.png)
+
 
 # Introduction
 The voting app is a PHP app hosted on amilia.app. It runs on a AWS Lightsail VPS. Send an email to helpdesk@amilia.com to gain access.
