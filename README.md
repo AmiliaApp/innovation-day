@@ -8,18 +8,21 @@ The voting app is a PHP app hosted on amilia.app. It runs on a AWS Lightsail VPS
 On your Windows machine, install a WAMP (EasyPHP or whatever you like). Fork the repo and clone it in the right place. If you have EasyPHP, you should clone it directly as the `eds-www` folder in order to have `index.php` directly there.
 
 ## Setting up the database
-In PhpMyAdmin, create a database called 'innovation' with 2 tables `project` and `person_votes`;
+In PhpMyAdmin, run this SQL to create the database and its tables:
 ```
-CREATE TABLE `project` (
+CREATE DATABASE IF NOT EXISTS `innovation` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `innovation`;
+
+CREATE TABLE `event` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-ALTER TABLE `project` ADD PRIMARY KEY (`id`);
-ALTER TABLE `project` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 CREATE TABLE `person_votes` (
   `id` int(10) UNSIGNED NOT NULL,
+  `event_id` int(10) UNSIGNED NOT NULL,
   `session` varchar(32) NOT NULL,
   `date` date NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -27,13 +30,27 @@ CREATE TABLE `person_votes` (
   `vote2_project_id` int(10) UNSIGNED DEFAULT NULL,
   `vote3_project_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-ALTER TABLE `person_votes` ADD PRIMARY KEY (`id`), ADD KEY `session` (`session`);
-ALTER TABLE `person_votes` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+CREATE TABLE `project` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `event_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `event`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `person_votes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `session` (`session`);
+
+ALTER TABLE `project`
+  ADD PRIMARY KEY (`id`);
 ```
 
 ## Setting up the configuration
-File `lib/config.php` is necessary to set up database credentials.
-Therefore, that file is ignored in git. You must create it. On your local environment, would look like this:
+File `lib/config.php` is necessary to set up database credentials. That file is ignored in git. You must create it. On your local environment, create `config.php` with this:
 ```
 <?php
   define('DB_HOST', '127.0.0.1');
@@ -47,7 +64,8 @@ Therefore, that file is ignored in git. You must create it. On your local enviro
 In a browser, simply type `localhost:8080` and you should see that app.
 
 # Understanding the codebase
-The project is written without any library for the back-end and the front-end. No AJAX is used either. Forms are used to send information to the browser using a simple `GET` passing parameters as query strings.
+
+The project is written with vanila PHP and Javascript; without any library for the back-end and the front-end. No AJAX is used either. Forms are used to send information to the browser using a simple `GET` passing parameters as query strings.
 
 Routes load the PHP file in question. The main default route is `index.php`. Let's look at the content of that file to understand what's going on.
 ```
@@ -80,6 +98,10 @@ The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 1. Event: The root entity representing the event in question. An event has a name and a date. There can only be one `active` event at a time. It is the one being displayed.
 2. Project: An event has a list of projects. A project has a name and a foreign key to the event it belongs to.
 3. Vote: A person can vote only once per project. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted vote in 3 hard-coded categories.
+
+# Deploying to prod
+
+Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. Database migrations, if any, should be run prior to updating the code.
 
 # TD DO
 1. Implement project delete. In file `admin_projects_view.php` the delete button is hidden because the controller is not yet implemented.
