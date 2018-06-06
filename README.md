@@ -106,8 +106,7 @@ The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. Database migrations, if any, should be run prior to updating the code.
 
 # TO DO
-1. Implement project deletion. In file `admin_projects_view.php` the delete button is hidden because the controller is not yet implemented.
-2. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
-3. Create a new event. Currently, only the active existing event can be modified. In the admin page, we need to allow creating a new event and making it active.
-4. Allow viewing non active events and switching the active event.
+1. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
+2. Create a new event. Currently, only the active existing event can be modified. In the admin page, we need to allow creating a new event and making it active.
+3. Allow viewing non active events and switching the active event.
 

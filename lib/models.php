@@ -186,9 +186,25 @@
   }
 
   function deleteProject($project_id) {
-    // TODO...
-    // 1. Validate that project exists, is part of current event and has no votes
-    // 2. Delete the sucker
+    $event = getCurrentEvent();
+    if (!is_array($event)) return FALSE;
+
+    $project = getProject($project_id);
+    if (!is_array($project)) return FALSE;
+    if ($project['event_id'] != $event['id']) return FALSE;
+    if ($project['vote1'] + $project['vote2'] + $project['vote3'] > 0) return FALSE;
+
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    if ($mysqli->connect_error) die("Connection failed: " . $mysqli->connect_error);
+
+    $stmt = $mysqli->prepare("DELETE FROM project WHERE id=?");
+    $stmt->bind_param("i", $project_id);
+    $stmt->execute();
+    $stmt->close();
+
+    $mysqli->close();
+
+    return TRUE;
   }
 
   /*

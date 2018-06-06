@@ -19,6 +19,7 @@
             if ($isActive) $project = $_APP['project'];
             $isError = $isActive && isset($_APP['error']) && isset($_APP['error']['name']);
             $formGroupState = $isError ? 'has-error' : ($isActive ? 'has-success' : '');
+            $votes = $project['vote1'] + $project['vote2'] + $project['vote3'];
           ?>
           <form class="form-horizontal" action="admin_project_submit.php" data-id="<?=$project['id']?>">
             <input type="hidden" name="id" value="<?=$project['id']?>" />
@@ -33,7 +34,9 @@
               </div>
               <div class="col-sm-3">
                 <button class="btn btn-default" type="submit">Update</button>
-                <a class="text-danger hidden" href="admin_project_delete.php?id=<?=$project['id']?>"><i class="fa fa-fw fa-trash"></i></a>
+                <?php if ($votes == 0): ?>
+                  <a class="text-danger" href="admin_project_delete.php?id=<?=$project['id']?>"><i class="fa fa-fw fa-trash"></i></a>
+                <?php endif; ?>
               </div>
             </div>
           </form>
