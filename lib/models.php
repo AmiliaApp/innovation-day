@@ -185,6 +185,12 @@
     return $project;
   }
 
+  function deleteProject($project_id) {
+    // TODO...
+    // 1. Validate that project exists, is part of current event and has no votes
+    // 2. Delete the sucker
+  }
+
   /*
     Votes - a list of person-votes per innovation day event
     table: person_votes
