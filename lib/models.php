@@ -124,6 +124,24 @@
     $result->free();
     $stmt->close();
 
+    if (is_array($project)) {
+      $project['vote1'] = 0;
+      $project['vote2'] = 0;
+      $project['vote3'] = 0;
+
+      $stmt = $mysqli->prepare("SELECT * FROM person_votes WHERE vote1_project_id=? || vote2_project_id=? || vote3_project_id=?");
+      $stmt->bind_param("iii", $project_id, $project_id, $project_id);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      while ($vote = $result->fetch_assoc()) {
+        $project['vote1'] += (int)$vote['vote1_project_id'];
+        $project['vote2'] += (int)$vote['vote2_project_id'];
+        $project['vote3'] += (int)$vote['vote3_project_id'];
+      }
+      $result->free();
+      $stmt->close();
+    }
+
     $mysqli->close();
 
     return is_array($project) ? $project : NULL;
@@ -168,7 +186,7 @@
   }
 
   /*
-    Votes - a list of person votes per innovation day event
+    Votes - a list of person-votes per innovation day event
     table: person_votes
   */
   function getPerson($event_id) {
