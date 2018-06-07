@@ -77,7 +77,7 @@ In a browser, simply type `localhost:8080` and you should see that app.
 
 # Understanding the codebase
 
-The project is written with vanila PHP and Javascript; without any library for the back-end and the front-end. No AJAX is used either. Forms are used to send information to the browser using a simple `GET` passing parameters as query strings.
+The app is written with vanila PHP and Javascript; without any library for the back-end and the front-end. No AJAX is used either. Forms are used to send information to the browser using a simple `GET` passing parameters as query strings. This is a true Web 1.0 app. Fortunately, we use Bootstrap to make it look modern. On your mobile phone, you can't tell the difference :)
 
 Routes load the PHP file in question. The main default route is `index.php`. Let's look at the content of that file to understand what's going on.
 ```
@@ -108,11 +108,11 @@ That's all there is to it.
 The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 1. Event: The root entity representing the event in question. An event has a name and a date. There can only be one `active` event at a time. It is the one being displayed.
 2. Project: An event has a list of projects. A project has a name and a foreign key to the event it belongs to.
-3. Vote: A person can vote only once per project. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted vote in 3 hard-coded categories. A person can change their vote which simply updates the specific row.
+3. Vote: A person can vote only once per event. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted votes in 3 hard-coded categories: `vote1_project_id`, `vote2_project_id` and `vote3_project_id`. A person can change their votes which simply updates the specific row.
 
 
 # Deploying to prod
-Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. Database migrations, if any, should be run prior to updating the code.
+Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. No compilcation required (don't you love interpreted languages:). Database migrations, if any, should be run prior to updating the code.
 
 # TO DO
 1. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
