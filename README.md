@@ -115,11 +115,11 @@ The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. No compilcation required (don't you love interpreted languages:). Database migrations, if any, should be run prior to updating the code. Use PhpMyAdmin to do that.
 
 # Why the hell did you code this in PHP?
-There's nothing like going back to basics sometimes. Every developer should know how to use PHP or even Perl to server Web pages. Its pretty bare bones and you can really hack your way to something cool. Heck, you can even directly code in prod if you like. Launch Putty and open up an editor like nano. You can modify PHP files directly on the server and see changes live. That's the beauty of interpreted languages. Kind of magic. Since the repo was cloned on the Linux box, you can use git to push changes or revert. Super fun to do. Of course, I do recommend you develop locally instead.
+There's nothing like going back to basics sometimes. Every developer should know how to use PHP or any other interpreted language to serve web pages. Its pretty bare bones and you can really hack your way to something cool. Heck, you can even directly code in prod if you like. Launch Putty and open up an editor like nano. You can modify PHP files directly on the server and see changes live. That's the beauty of interpreted languages. Kind of magic. Since the repo was cloned on the Linux box, you can use git to push changes or revert. Super fun to do. Of course, I do recommend you develop locally instead.
 
 
 # TO DO
-1. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
+1. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons. Fortunately, the model layer methods `isAdminAuthenticated` and `authenicateAdmin` were written. But the view has not yet.
 2. Create a new event. Currently, only the active existing event can be modified. In the admin page, we need to allow creating a new event and making it active.
 3. Allow viewing non active events and switching the active event.
 4. In `models.php`, throw errors when validation or SQL statements fail. In controllers, try/catch the errors and report them. Currently, we use `die` for some things, and ignore errors on SQL statements. Pretty bad.
