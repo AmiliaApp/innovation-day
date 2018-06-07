@@ -108,11 +108,15 @@ That's all there is to it.
 The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 1. Event: The root entity representing the event in question. An event has a name and a date. There can only be one `active` event at a time. It is the one being displayed.
 2. Project: An event has a list of projects. A project has a name and a foreign key to the event it belongs to.
-3. Vote: A person can vote only once per event. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted votes in 3 hard-coded categories: `vote1_project_id`, `vote2_project_id` and `vote3_project_id`. A person can change their votes which simply updates the specific row.
+3. Vote: A person can vote only once per event. Table `person_vote` links a person (uniquely identified by a session id saved in a browser cookie) and their casted votes in 3 hard-coded categories: `vote1_project_id`, `vote2_project_id` and `vote3_project_id`. A person can change their votes for the active event anytime. This simply updates the specific row.
 
 
 # Deploying to prod
-Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. No compilcation required (don't you love interpreted languages:). Database migrations, if any, should be run prior to updating the code.
+Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. No compilcation required (don't you love interpreted languages:). Database migrations, if any, should be run prior to updating the code. Use PhpMyAdmin to do that.
+
+# Hacking in prod
+Since the app runs on interpreted languages (PHP and Javascript), you can code directly in prod if you like. Yes, this is pretty damn crazy but being a 'hacked' app, why the hell not! You can just commit and push your changes to git afterwards. Ain't that cool :) Of course, I recommend you develop locally instead.
+
 
 # TO DO
 1. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
