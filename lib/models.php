@@ -17,7 +17,7 @@
 
   /* Admin authentication */
   function isAdminAuthenticated() {
-    return array_key_exists(ADMIN_COOKIE_NAME, $_COOKIE)) && $_COOKIE[ADMIN_COOKIE_NAME] == ADMIN_COOKIE_SECRET_VALUE;
+    return array_key_exists(ADMIN_COOKIE_NAME, $_COOKIE) && $_COOKIE[ADMIN_COOKIE_NAME] == ADMIN_COOKIE_SECRET_VALUE;
   }
 
   function authenicateAdmin($password) {
