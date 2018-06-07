@@ -77,7 +77,7 @@ In a browser, simply type `localhost:8080` and you should see that app.
 
 # Understanding the codebase
 
-The app is written with vanila PHP and Javascript; without any library for the back-end and the front-end. No AJAX is used either. Forms are used to send information to the browser using a simple `GET` passing parameters as query strings. This is a true Web 1.0 app. Fortunately, we use Bootstrap to make it look modern. On your mobile phone, you can't tell the difference :)
+The app is written with vanila PHP and Javascript; without any library for the back-end and the front-end. No AJAX is used either. No compilationand no transpilation required. Forms are used to send information to the browser using a simple `GET` passing parameters as query strings. This is a true Web 1.0 app. Fortunately, we use Bootstrap to make it look modern. On your mobile phone, you can't tell the difference :)
 
 Routes load the PHP file in question. The main default route is `index.php`. Let's look at the content of that file to understand what's going on.
 ```
@@ -114,8 +114,8 @@ The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 # Deploying to prod
 Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. No compilcation required (don't you love interpreted languages:). Database migrations, if any, should be run prior to updating the code. Use PhpMyAdmin to do that.
 
-# Hacking in prod
-Since the app runs on interpreted languages (PHP and Javascript), you can code directly in prod if you like. Yes, this is pretty damn crazy but being a 'hacked' app, why the hell not! You can just commit and push your changes to git afterwards. Ain't that cool :) Of course, I recommend you develop locally instead.
+# Why the hell did you code this in PHP?
+There's nothing like going back to basics sometimes. Every developer should know how to use PHP or even Perl to server Web pages. Its pretty bare bones and you can really hack your way to something cool. Heck, you can even directly code in prod if you like. Launch Putty and open up an editor like nano. You can modify PHP files directly on the server and see changes live. That's the beauty of interpreted languages. Kind of magic. Since the repo was cloned on the Linux box, you can use git to push changes or revert. Super fun to do. Of course, I do recommend you develop locally instead.
 
 
 # TO DO
