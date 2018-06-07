@@ -54,18 +54,26 @@ ALTER TABLE `project`
 ```
 
 ## Setting up the configuration
-File `lib/config.php` is necessary to set up database credentials. That file is ignored in git. You must create it. On your local environment, create `config.php` with this:
+File `lib/config.php` is necessary to set up database credentials. That file is not commited and ignored in git. You must create it. On your local environment, create `config.php` with this:
 ```
 <?php
   define('DB_HOST', '127.0.0.1');
   define('DB_NAME', 'innovation');
   define('DB_USER', 'root');
   define('DB_PASSWORD', '');
+  define('COOKIE_NAME', 'InnovationDay');
+  define('ADMIN_PASSWORD', '');
+  define('ADMIN_COOKIE_NAME', 'InnovationDayAdmin');
+  define('ADMIN_COOKIE_SECRET_VALUE', md5(ADMIN_PASSWORD.'some secret string'));
 ?>
 ```
+The `DB_*` constants are used to connect to the MySQL database.
+The `COOKIE_NAME` constant is used to store the user session.
+The `ADMIN_PASSWORD` constant is used to authentify an admin. On the server should be a real password. In development, leave blank for no password authentication. Once the user is authenticated, a cookie is saved with the name provided by constant `ADMIN_COOKIE_NAME` set to the value provided by constant `ADMIN_COOKIE_SECRET_VALUE`. To 'log out' everyone, just change the password.
 
 ## Running
 In a browser, simply type `localhost:8080` and you should see that app.
+
 
 # Understanding the codebase
 
@@ -96,11 +104,12 @@ The view layout `page.php` is the HTML document we will send. It loads necessary
 
 That's all there is to it.
 
-# Entities
+## Entities
 The voting app consists of 3 types of entities directly mapped to 3 SQL tables:
 1. Event: The root entity representing the event in question. An event has a name and a date. There can only be one `active` event at a time. It is the one being displayed.
 2. Project: An event has a list of projects. A project has a name and a foreign key to the event it belongs to.
 3. Vote: A person can vote only once per project. Table `person_vote` links a person (uniquely identified by a session id saved in the browser cookie) and their casted vote in 3 hard-coded categories. A person can change their vote which simply updates the specific row.
+
 
 # Deploying to prod
 Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` folder and simply do a `git pull`. This will fetch the latest and greates from GitHub. Database migrations, if any, should be run prior to updating the code.
@@ -109,4 +118,5 @@ Log into the Lightsail VPS using Putty. Step into the `~/apps/innovation/www` fo
 1. Authenticate admins. Currently, the admin pages are openly accessible to anyone. This should change for security reasons.
 2. Create a new event. Currently, only the active existing event can be modified. In the admin page, we need to allow creating a new event and making it active.
 3. Allow viewing non active events and switching the active event.
+4. In `models.php`, throw errors when validation or SQL statements fail. In controllers, try/catch the errors and report them. Currently, we use `die` for some things, and ignore errors on SQL statements. Pretty bad.
 

@@ -1,6 +1,5 @@
 <?php
   require 'config.php';
-  define('COOKIE_NAME', 'InnovationDay');
   define('VOTE1_NAME', 'Best overall');
   define('VOTE2_NAME', 'Best presentation');
   define('VOTE3_NAME', 'Best MVP');
@@ -15,6 +14,20 @@
     'error' => NULL,
     'saved' => FALSE
   );
+
+  /* Admin authentication */
+  function isAdminAuthenticated() {
+    return array_key_exists(ADMIN_COOKIE_NAME, $_COOKIE)) && $_COOKIE[ADMIN_COOKIE_NAME] == ADMIN_COOKIE_SECRET_VALUE;
+  }
+
+  function authenicateAdmin($password) {
+    if ($password == ADMIN_PASSWORD) {
+        $expire = time()+60*60*24*30;
+        setcookie(ADMIN_COOKIE_NAME, ADMIN_COOKIE_SECRET_VALUE, $expire, '/');
+      return TRUE;
+    }
+    return FALSE;
+  }
 
   /*
     Events - a list of innovation day events.
@@ -166,7 +179,6 @@
       $name = $project['name'];
       $project_id = $project['id'];
       $stmt->execute();
-      echo $stmt->error;
       $stmt->close();
     } else {
       // Insert
