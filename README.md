@@ -1,4 +1,5 @@
-# Innovation Day Voting App
+Innovation Day Voting App
+-------------------------
 
 https://amilia.app
 
@@ -8,7 +9,26 @@ https://amilia.app
 # Introduction
 The voting app is a PHP app hosted on amilia.app. It runs on a AWS Lightsail VPS. Send an email to helpdesk@amilia.com to gain access.
 
-# Dev local set up
+# Administration
+The administration is straight SQL via PhpMyAdmin. You will need to gain access to the AWS instance via SSH in order to use PhpMyAdmin. Follow these instructions:
+1. Obtain a private key from Alexandre Beauclair to the Amazon Lightsail AmiliaLab-WordPress instance.
+2. Install putty and launch it.
+3. In Saved Session type in "Amilia Lab Lightsail" and in hostname 18.219.216.23.
+4. Go to the SSH=>Auth section and load the private key file to authentication.
+5. To to the SSH=>Tunnels page and add a new forwarded port: set Source Port to 7799 and Destination to localhost:80.
+6. Click back on Session and hit Save.
+7. Click Open to launch the SSH session.
+8. Log in username is bitnami. You should now be logged in. The SSH tunnel is now opened.
+9. In a browser type in: http://127.0.0.1:7799/phpmyadmin.
+10. Login username is root. Password can be obtained in the SSH console by typing this command: cat bitnami_application_password.
+11. Save credentials with your browser to avoid being asked again.
+From here on, you should only need to open the SSH session and then access PhpMyAdmin in the browser.
+
+TODO: It would be nice if someone could write an admin UI to manage the app instead of jumping through these hoops.
+
+
+Dev local set up
+----------------
 On your Windows machine, install a WAMP (EasyPHP or whatever you like). Fork the repo and clone it in the right place. If you have EasyPHP, you should clone it directly as the `eds-www` folder in order to have `index.php` directly there.
 
 ## Setting up the database
